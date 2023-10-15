@@ -44,35 +44,49 @@ type FaasOperation struct {
 
 // createFunction Create a function with execution name
 func createFunction(name string) *FaasOperation {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::createFunction start")
 	operation := &FaasOperation{}
 	operation.Function = name
 	operation.Header = make(map[string]string)
 	operation.Param = make(map[string][]string)
+	fmt.Printf("lib/openfaas/faas_operation.go::createFunction end")
 	return operation
 }
 
 // createModifier Create a modifier
 func createModifier(mod Modifier) *FaasOperation {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::createModifier start")
 	operation := &FaasOperation{}
 	operation.Mod = mod
+	fmt.Printf("lib/openfaas/faas_operation.go::createModifier end")
 	return operation
 }
 
 // createHttpRequest Create a httpRequest
 func createHttpRequest(url string) *FaasOperation {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::createHttpRequest start")
 	operation := &FaasOperation{}
 	operation.HttpRequestUrl = url
 	operation.Header = make(map[string]string)
 	operation.Param = make(map[string][]string)
+	fmt.Printf("lib/openfaas/faas_operation.go::createHttpRequest end")
 	return operation
 }
 
 func (operation *FaasOperation) addheader(key string, value string) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::addheader start")
 	lKey := strings.ToLower(key)
 	operation.Header[lKey] = value
+	fmt.Printf("lib/openfaas/faas_operation.go::addheader end")
 }
 
 func (operation *FaasOperation) addparam(key string, value string) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::addparam start")
 	array, ok := operation.Param[key]
 	if !ok {
 		operation.Param[key] = make([]string, 1)
@@ -80,29 +94,47 @@ func (operation *FaasOperation) addparam(key string, value string) {
 	} else {
 		operation.Param[key] = append(array, value)
 	}
+	fmt.Printf("lib/openfaas/faas_operation.go::addparam end")
 }
 
 func (operation *FaasOperation) addFailureHandler(handler FuncErrorHandler) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::addFailureHandler start")
 	operation.FailureHandler = handler
+	fmt.Printf("lib/openfaas/faas_operation.go::addFailureHandler end")
 }
 
 func (operation *FaasOperation) addResponseHandler(handler RespHandler) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::addResponseHandler start")
 	operation.OnResphandler = handler
+	fmt.Printf("lib/openfaas/faas_operation.go::addResponseHandler end")
 }
 
 func (operation *FaasOperation) addRequestHandler(handler ReqHandler) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::addRequestHandler start")
 	operation.Requesthandler = handler
+	fmt.Printf("lib/openfaas/faas_operation.go::addRequestHandler end")
 }
 
 func (operation *FaasOperation) GetParams() map[string][]string {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::GetParams start")
+	fmt.Printf("lib/openfaas/faas_operation.go::GetParams end")
 	return operation.Param
 }
 
 func (operation *FaasOperation) GetHeaders() map[string]string {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::GetHeaders start")
+	fmt.Printf("lib/openfaas/faas_operation.go::GetHeaders end")
 	return operation.Header
 }
 
 func (operation *FaasOperation) GetId() string {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::GetId start")
 	id := "modifier"
 	switch {
 	case operation.Function != "":
@@ -110,22 +142,31 @@ func (operation *FaasOperation) GetId() string {
 	case operation.HttpRequestUrl != "":
 		id = "http-req-" + operation.HttpRequestUrl[len(operation.HttpRequestUrl)-16:]
 	}
+	fmt.Printf("lib/openfaas/faas_operation.go::GetId end")
 	return id
 }
 
 func (operation *FaasOperation) Encode() []byte {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::Encode start")
+	fmt.Printf("lib/openfaas/faas_operation.go::Encode end")
 	return []byte("")
 }
 
 // buildURL builds OpenFaaS function execution url for the flow
 func buildURL(gateway, rPath, function string) string {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::buildURL start")
 	u, _ := url.Parse(gateway)
 	u.Path = path.Join(u.Path, rPath+"/"+function)
+	fmt.Printf("lib/openfaas/faas_operation.go::buildURL end")
 	return u.String()
 }
 
 // makeQueryStringFromParam create query string from provided query
 func makeQueryStringFromParam(params map[string][]string) string {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::makeQueryStringFromParam start")
 	if params == nil {
 		return ""
 	}
@@ -140,6 +181,7 @@ func makeQueryStringFromParam(params map[string][]string) string {
 			}
 		}
 	}
+	fmt.Printf("lib/openfaas/faas_operation.go::makeQueryStringFromParam end")
 	return result
 }
 
@@ -147,6 +189,7 @@ func makeQueryStringFromParam(params map[string][]string) string {
 func buildHttpRequest(url string, method string, data []byte, params map[string][]string,
 	headers map[string]string) (*http.Request, error) {
 
+	fmt.Printf("lib/openfaas/faas_operation.go::buildHttpRequest start")
 	queryString := makeQueryStringFromParam(params)
 	if queryString != "" {
 		url = url + queryString
@@ -161,11 +204,14 @@ func buildHttpRequest(url string, method string, data []byte, params map[string]
 		httpReq.Header.Add(key, value)
 	}
 
+	fmt.Printf("lib/openfaas/faas_operation.go::buildHttpRequest end")
 	return httpReq, nil
 }
 
 // executeFunction executes a function call
 func executeFunction(gateway string, operation *FaasOperation, data []byte) ([]byte, error) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::executeFunction start")
 	var err error
 	var result []byte
 
@@ -210,12 +256,14 @@ func executeFunction(gateway string, operation *FaasOperation, data []byte) ([]b
 			result, err = ioutil.ReadAll(resp.Body)
 		}
 	}
-
+	fmt.Printf("lib/openfaas/faas_operation.go::executeFunction end")
 	return result, err
 }
 
 // executeHttpRequest executes a httpRequest
 func executeHttpRequest(operation *FaasOperation, data []byte) ([]byte, error) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::executeHttpRequest start")
 	var err error
 	var result []byte
 
@@ -258,11 +306,14 @@ func executeHttpRequest(operation *FaasOperation, data []byte) ([]byte, error) {
 			result, err = ioutil.ReadAll(resp.Body)
 		}
 	}
+	fmt.Printf("lib/openfaas/faas_operation.go::executeHttpRequest end")
 	return result, err
 
 }
 
 func (operation *FaasOperation) Execute(data []byte, option map[string]interface{}) ([]byte, error) {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::Execute start")
 	var result []byte
 	var err error
 
@@ -317,12 +368,13 @@ func (operation *FaasOperation) Execute(data []byte, option map[string]interface
 			result = []byte("")
 		}
 	}
-
+	fmt.Printf("lib/openfaas/faas_operation.go::Execute end")
 	return result, nil
 }
 
 func (operation *FaasOperation) GetProperties() map[string][]string {
 
+	fmt.Printf("lib/openfaas/faas_operation.go::GetProperties start")
 	result := make(map[string][]string)
 
 	isMod := "false"
@@ -353,6 +405,7 @@ func (operation *FaasOperation) GetProperties() map[string][]string {
 	result["hasFailureHandler"] = []string{hasFailureHandler}
 	result["hasResponseHandler"] = []string{hasResponseHandler}
 
+	fmt.Printf("lib/openfaas/faas_operation.go::GetProperties end")
 	return result
 }
 
@@ -360,14 +413,18 @@ func (operation *FaasOperation) GetProperties() map[string][]string {
 
 // Modify adds a new modifier to the given vertex
 func (node *Node) Modify(mod Modifier) *Node {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::Modify start")
 	newMod := createModifier(mod)
 	node.unode.AddOperation(newMod)
+	fmt.Printf("lib/openfaas/faas_operation.go::Modify end")
 	return node
 }
 
 // Apply adds a new function to the given vertex
 func (node *Node) Apply(function string, opts ...Option) *Node {
 
+	fmt.Printf("lib/openfaas/faas_operation.go::Apply start")
 	newfunc := createFunction(function)
 
 	o := &Options{}
@@ -398,11 +455,14 @@ func (node *Node) Apply(function string, opts ...Option) *Node {
 	}
 
 	node.unode.AddOperation(newfunc)
+	fmt.Printf("lib/openfaas/faas_operation.go::Apply end")
 	return node
 }
 
 // Request adds a new http Request to the given vertex
 func (node *Node) Request(url string, opts ...Option) *Node {
+
+	fmt.Printf("lib/openfaas/faas_operation.go::Request start")
 	newHttpRequest := createHttpRequest(url)
 
 	o := &Options{}
@@ -433,5 +493,6 @@ func (node *Node) Request(url string, opts ...Option) *Node {
 	}
 
 	node.unode.AddOperation(newHttpRequest)
+	fmt.Printf("lib/openfaas/faas_operation.go::Request end")
 	return node
 }

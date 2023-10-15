@@ -1,5 +1,5 @@
-module github.com/faasflow/lib
+module github.com/Abhishekghosh1998/faasflow-lib
 
 go 1.13
 
-require github.com/faasflow/sdk v0.0.0-20200705012738-72f2bcdb62d1
+require github.com/Abhishekghosh1998/faasflow-sdk latest
