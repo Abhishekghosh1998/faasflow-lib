@@ -1,0 +1,4 @@
+github.com/Abhishekghosh1998/faasflow-sdk v0.0.0-20231016045342-b8715b10c469 h1:zM0f0gqnPWLO8ijwgM3xOjHxrT0gt2D8rWvc1OHlGv8=
+github.com/Abhishekghosh1998/faasflow-sdk v0.0.0-20231016045342-b8715b10c469/go.mod h1:SdHlA8VkD31b42id1BTbXX5nYxDIr14HXwWn/GV/Ubg=
+github.com/alexellis/hmac v1.3.0/go.mod h1:WmZwlIfB7EQaDuiScnQoMSs3K+1UalW/7ExXP3Cc2zU=
+github.com/rs/xid v1.5.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
